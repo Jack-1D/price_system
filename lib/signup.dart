@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:price_system/db_service.dart';
 
 import 'character.dart';
@@ -70,9 +71,9 @@ class _SignUpFormState extends State<SignUpForm> {
               controller: _usernameTextController,
               decoration: const InputDecoration(hintText: 'Username'),
               keyboardType: TextInputType.emailAddress,
-              // inputFormatters: [
-              //   FilteringTextInputFormatter.allow(RegExp("[]"))
-              // ],
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]"))
+              ],
             ),
           ),
           Padding(
@@ -90,6 +91,9 @@ class _SignUpFormState extends State<SignUpForm> {
               controller: _gmailTextController,
               decoration: const InputDecoration(hintText: 'Gmail'),
               keyboardType: TextInputType.emailAddress,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9@.!#\$%&'*+-/=?^_`{|}~]"))
+              ],
             ),
           ),
           CharacterSelection(_selectedCharacter, (value) {
