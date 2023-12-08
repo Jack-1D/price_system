@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CharacterSelection extends StatefulWidget {
   final String groupValue;
   final Function(String) onChanged;
-  const CharacterSelection(this.groupValue, this.onChanged);
+  const CharacterSelection(this.groupValue, this.onChanged, {super.key});
 
   @override
   State<CharacterSelection> createState() => _CharacterSelectionState();

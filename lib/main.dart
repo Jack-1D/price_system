@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:price_system/rd/rd_page.dart';
+import 'package:price_system/signin.dart';
 import 'package:price_system/signup.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const SignUpApp());
 }
 
@@ -16,14 +22,14 @@ class SignUpApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/': (context) => const SignUpScreen(),
+        '/': (context) => const SignInScreen(),
+        '/signup': (context) => const SignUpScreen(),
         '/welcome': (context) => const WelcomeScreen(),
+        '/RD': (context) => const RDScrren(),
       },
     );
   }
 }
-
-
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});

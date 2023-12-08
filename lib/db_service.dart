@@ -14,28 +14,57 @@ class FireDB {
       required String character}) async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
       CollectionReference userDb =
           FirebaseFirestore.instance.collection("user");
-      await userDb
-          .doc(username)
-          .set({'username': username, 'gmail': gmail, 'password': password, 'name': name, 'company': company, 'character': character});
+      await userDb.doc(username).set({
+        'username': username,
+        'gmail': gmail,
+        'password': password,
+        'name': name,
+        'company': company,
+        'character': character
+      });
       return "success";
     } catch (e) {
       return e.toString();
     }
   }
 
-  Future<String?> getUser(String username) async {
+  Future<dynamic> getUser(String uid) async {
     try {
-      await Firebase.initializeApp();
+      WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      CollectionReference userDb =
+          FirebaseFirestore.instance.collection("user");
+      final snapshot = await userDb.doc(uid).get();
+      final data = snapshot.data() as Map<String, dynamic>;
+      return data;
+    } catch (e) {
+      return "Error fetch user";
+    }
+  }
+
+  Future<String?> checkUser(
+      {required String username, required String password}) async {
+    try {
+      WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
       CollectionReference userDb =
           FirebaseFirestore.instance.collection("user");
       final snapshot = await userDb.doc(username).get();
+      print(snapshot);
       final data = snapshot.data() as Map<String, dynamic>;
-      return data['gmail'];
+      print(data['character']);
+      return data['username'];
     } catch (e) {
-      return "Error fetch user";
+      return e.toString();
     }
   }
 }
