@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:price_system/rd/addpaper.dart';
 import 'package:price_system/rd/showpaper.dart';
@@ -9,37 +8,54 @@ class RDScrren extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    dynamic user= ModalRoute.of(context)!.settings.arguments as dynamic;
+    dynamic user = ModalRoute.of(context)!.settings.arguments as dynamic;
     return Scaffold(
       appBar: AppBar(
         title: Text("RD (${user['username']})"),
         actions: [
           TextButton(
-            child: Text("圖紙總覽", style: TextStyle(fontSize: 20),),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ShowPaper()));
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/login", (route) => false);
             },
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.resolveWith((states) {
                 return Colors.white;
               }),
             ),
+            child: const Text(
+              "登出",
+              style: TextStyle(fontSize: 20),
+            ),
           ),
           TextButton(
-            child: Text("新增圖紙", style: TextStyle(fontSize: 20),),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const AddPaper()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const ShowPaper()));
             },
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.resolveWith((states) {
                 return Colors.white;
               }),
+            ),
+            child: const Text(
+              "圖紙總覽",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const AddPaper()));
+            },
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.resolveWith((states) {
+                return Colors.white;
+              }),
+            ),
+            child: const Text(
+              "新增圖紙",
+              style: TextStyle(fontSize: 20),
             ),
           ),
           IconButton(

@@ -110,8 +110,12 @@ class _SignInFormState extends State<SignInForm> {
                                   "/RD", (route) => false, arguments: user);
                               break;
                             case "Supplier":
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  "/Supplier", (route) => false, arguments: user);
                               break;
                             case "PD":
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  "/PD", (route) => false, arguments: user);
                               break;
                             default:
                           }
