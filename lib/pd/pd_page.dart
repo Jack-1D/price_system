@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:price_system/pd/assignquotation.dart';
 import 'package:price_system/pd/createquotation.dart';
-import 'package:price_system/rd/addpaper.dart';
-import 'package:price_system/rd/showpaper.dart';
 import 'package:price_system/user_maintain.dart';
 
 class PDScreen extends StatelessWidget {

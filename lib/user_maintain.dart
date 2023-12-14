@@ -7,7 +7,7 @@ class UserMaintain extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("聯絡資訊修改"),
+        title: const Text("聯絡資訊修改"),
         
       ),
     );

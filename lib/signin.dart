@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:price_system/db_service.dart';
-import 'package:price_system/rd/rd_page.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});

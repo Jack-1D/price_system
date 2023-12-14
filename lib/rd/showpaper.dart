@@ -7,7 +7,7 @@ class ShowPaper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("圖紙總覽"),
+        title: const Text("圖紙總覽"),
         
       ),
     );
