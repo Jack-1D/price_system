@@ -1,4 +1,6 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:price_system/db_service.dart';
 import 'package:price_system/rd/addpaper.dart';
 import 'package:price_system/rd/showpaper.dart';
 import 'package:price_system/user_maintain.dart';
@@ -29,9 +31,18 @@ class RDScrren extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const ShowPaper()));
+            onPressed: () async {
+              final storageRef = FirebaseStorage.instance.ref().child("papers");
+              final listResult = await storageRef.listAll();
+              List<Map<String, dynamic>> paperdetail = await FireDB()
+                  .getPaperDetail(papernamelist: listResult.items);
+              print("listResult: ${listResult.items}");
+              print("paperdetail: $paperdetail");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ShowPaper(
+                          listresult: listResult, paperdetail: paperdetail)));
             },
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.resolveWith((states) {
@@ -45,8 +56,10 @@ class RDScrren extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const AddPaper()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddPaper(user: user)));
             },
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.resolveWith((states) {

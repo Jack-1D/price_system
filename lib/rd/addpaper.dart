@@ -1,12 +1,14 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AddPaper extends StatelessWidget {
-  const AddPaper({super.key});
+  final dynamic user;
+  const AddPaper({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +16,11 @@ class AddPaper extends StatelessWidget {
       appBar: AppBar(
         title: const Text("新增圖紙"),
       ),
-      body: const Center(
+      body: Center(
         child: SizedBox(
           width: 600,
           child: Card(
-            child: AddPaperForm(),
+            child: AddPaperForm(user: user),
           ),
         ),
       ),
@@ -27,7 +29,8 @@ class AddPaper extends StatelessWidget {
 }
 
 class AddPaperForm extends StatefulWidget {
-  const AddPaperForm({super.key});
+  final dynamic user;
+  const AddPaperForm({Key? key, required this.user}) : super(key: key);
 
   @override
   State<AddPaperForm> createState() => _AddPaperFormState();
@@ -114,39 +117,50 @@ class _AddPaperFormState extends State<AddPaperForm> {
                           duration: const Duration(seconds: 1),
                         ));
                       } else {
-                        final uploadref = await FirebaseStorage
-                            .instance
-                            .ref('papers/${_papernamecontroller.text}');
-                          uploadref.putData(file!.bytes!).snapshotEvents.listen((TaskSnapshot event) {
-                            String? prestate = uploadMSG;
-                            switch (event.state) {
-                              case TaskState.paused:
-                                uploadMSG = "暫停上傳";
-                                break;
-                              case TaskState.running:
-                                uploadMSG = "正在上傳";
-                                break;
-                              case TaskState.success:
-                                uploadMSG = "上傳成功";
-                                break;
-                              case TaskState.canceled:
-                                uploadMSG = "取消上傳";
-                                break;
-                              case TaskState.error:
-                                uploadMSG = "上傳失敗";
-                                break;
-                            }
-                            if(prestate != uploadMSG){
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                behavior: SnackBarBehavior.floating,
-                                backgroundColor:
-                                    Theme.of(context).primaryColor.withOpacity(0.8),
-                                elevation: 0,
-                                content: Text(uploadMSG),
-                                duration: const Duration(seconds: 1),
-                              ));
-                            }
-                          });
+                        final uploadref = await FirebaseStorage.instance
+                            .ref('papers/${_papernamecontroller.text}${file!.name.substring(file!.name.lastIndexOf('.'))}');
+                        uploadref
+                            .putData(file!.bytes!)
+                            .snapshotEvents
+                            .listen((TaskSnapshot event) {
+                          String? prestate = uploadMSG;
+                          switch (event.state) {
+                            case TaskState.paused:
+                              uploadMSG = "暫停上傳";
+                              break;
+                            case TaskState.running:
+                              uploadMSG = "正在上傳";
+                              break;
+                            case TaskState.success:
+                              uploadMSG = "上傳成功";
+                              break;
+                            case TaskState.canceled:
+                              uploadMSG = "取消上傳";
+                              break;
+                            case TaskState.error:
+                              uploadMSG = "上傳失敗";
+                              break;
+                          }
+                          if (prestate != uploadMSG) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(0.8),
+                              elevation: 0,
+                              content: Text(uploadMSG),
+                              duration: const Duration(seconds: 1),
+                            ));
+                          }
+                        });
+                        FirebaseFirestore.instance
+                            .collection('papers')
+                            .doc(_papernamecontroller.text+file!.name.substring(file!.name.lastIndexOf('.')))
+                            .set({
+                          'version': _paperversioncontroller.text,
+                          'uploader': widget.user,
+                          'uploadtime': DateTime.now(),
+                        });
                       }
                     }
                   : null,

@@ -67,4 +67,27 @@ class FireDB {
       return e.toString();
     }
   }
+
+  Future<List<Map<String, dynamic>>> getPaperDetail({required List papernamelist}) async {
+    List<Map<String, dynamic>> paperdetail = [];
+    try {
+      WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      CollectionReference paperDB =
+          FirebaseFirestore.instance.collection("papers");
+      for (dynamic papername in papernamelist) {
+        final snapshot = await paperDB.doc(papername.fullPath.substring(7)).get();
+        final data = snapshot.data() as Map<String, dynamic>?;
+        if (data != null) {
+          paperdetail.add(data);
+        }
+      }
+      return paperdetail;
+    } catch (e) {
+      print("Fail to find something in paperDB");
+      return [];
+    }
+  }
 }
